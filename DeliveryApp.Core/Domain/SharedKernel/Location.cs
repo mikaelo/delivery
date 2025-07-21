@@ -8,8 +8,8 @@ namespace DeliveryApp.Core.Domain.SharedKernel;
 /// </summary>
 public class Location : ValueObject
 {
-    private const int MinCoordinate = 1;
-    private const int MaxCoordinate = 10;
+    public static readonly Location MinCoordinates = new(1, 1);
+    public static readonly Location MaxCoordinates = new(10, 10);
     
     /// <summary>
     /// X (горизонталь)
@@ -83,16 +83,16 @@ public class Location : ValueObject
     /// <summary>
     /// Создает новую координату
     /// </summary>
-    /// <param name="x">Координата по горизонтали (от 1 до 10)</param>
-    /// <param name="y">Координата по вертикали (от 1 до 10)</param>
+    /// <param name="x">Координата по горизонтали</param>
+    /// <param name="y">Координата по вертикали</param>
     /// <returns>Result с Location или сообщением об ошибке</returns> 
     public static Result<Location> Create(int x, int y)
     {
-        if (x is < MinCoordinate or > MaxCoordinate)
-            return Result.Failure<Location>($"Координата X должна быть в диапазоне от {MinCoordinate} до {MaxCoordinate}. Получено: {x}");
+        if (x < MinCoordinates.X || x > MaxCoordinates.X)
+            return Result.Failure<Location>($"Координата X должна быть в диапазоне от {MinCoordinates.X} до {MaxCoordinates.X}. Получено: {x}");
             
-        if (y is < MinCoordinate or > MaxCoordinate)
-            return Result.Failure<Location>($"Координата Y должна быть в диапазоне от {MinCoordinate} до {MaxCoordinate}. Получено: {y}");
+        if (y < MinCoordinates.Y || y > MaxCoordinates.Y)
+            return Result.Failure<Location>($"Координата Y должна быть в диапазоне от {MinCoordinates.Y} до {MaxCoordinates.Y}. Получено: {y}");
             
         return Result.Success(new Location(x, y));
     }
@@ -107,8 +107,9 @@ public class Location : ValueObject
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        var randomX = random.Next(MinCoordinate, MaxCoordinate + 1);
-        var randomY = random.Next(MinCoordinate, MaxCoordinate + 1);
+        var randomX = random.Next(MinCoordinates.X, MaxCoordinates.X + 1);
+        var randomY = random.Next(MinCoordinates.Y, MaxCoordinates.Y + 1);
+        
         return new Location(randomX, randomY);
     }
     
