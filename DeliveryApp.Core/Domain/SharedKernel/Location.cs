@@ -35,7 +35,7 @@ public class Location : ValueObject
     [ExcludeFromCodeCoverage]
     public override string ToString()
     {
-        return $"({X}, {Y})";
+        return $"(X:{X}, Y:{Y})";
     }
     
     [ExcludeFromCodeCoverage]
