@@ -25,10 +25,10 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate
         public Guid? OrderId { get; private set; }
 
         /// <summary>
-        /// Проверяет, является ли место хранения пустым
+        /// Проверяет, является ли место хранения занятым
         /// </summary>
-        public bool IsEmpty => !OrderId.HasValue;
-
+        private bool IsOccupied => OrderId.HasValue;
+        
         /// <summary>
         /// Для EF
         /// </summary>
@@ -71,13 +71,13 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate
         /// </summary>
         /// <param name="orderVolume">Объем заказа</param>
         /// <returns>true - если можно поместить заказ, false - если нельзя</returns>
-        public bool CanPlaceOrder(Volume orderVolume)
+        public bool CanStore(Volume orderVolume)
         {
             if (orderVolume == null)
                 throw new ArgumentNullException(nameof(orderVolume));
 
             // Проверяем, что место хранения пустое
-            if (!IsEmpty)
+            if (IsOccupied)
                 return false;
 
             // Проверяем, что объем места хранения может вместить заказ
@@ -90,12 +90,12 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate
         /// <param name="orderId">Идентификатор заказа</param>
         /// <param name="orderVolume">Объем заказа</param>
         /// <exception cref="InvalidOperationException">Выбрасывается при попытке поместить заказ в занятое место или при превышении объема</exception>
-        public void PlaceOrder(Guid orderId, Volume orderVolume)
+        public void Store(Guid orderId, Volume orderVolume)
         {
             if (orderVolume == null)
                 throw new ArgumentNullException(nameof(orderVolume));
 
-            if (!IsEmpty)
+            if (IsOccupied)
                 throw new InvalidOperationException("В месте хранения уже находится другой заказ");
 
             if (!TotalVolume.CanAccommodate(orderVolume))
@@ -109,15 +109,12 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate
         /// </summary>
         /// <returns>Идентификатор извлеченного заказа</returns>
         /// <exception cref="InvalidOperationException">Выбрасывается при попытке извлечь заказ из пустого места хранения</exception>
-        public Guid ExtractOrder()
+        public void Clear()
         {
-            if (IsEmpty)
+            if (!IsOccupied)    
                 throw new InvalidOperationException("Место хранения пустое, нечего извлекать");
-
-            var extractedOrderId = OrderId.Value;
-            OrderId = null;
             
-            return extractedOrderId;
+            OrderId = null;
         }
         
         /// <summary>
@@ -126,7 +123,7 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate
         [ExcludeFromCodeCoverage]
         public override string ToString()
         {
-            var status = IsEmpty ? "пустое" : $"занято заказом {OrderId}";
+            var status = !IsOccupied ? "пустое" : $"занято заказом {OrderId}";
             return $"StoragePlace [{Id}]: {Name} (объем: {TotalVolume}, статус: {status})";
         }
     }

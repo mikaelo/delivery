@@ -13,7 +13,7 @@ public class VolumeShould
         public void BeCreated_WhenGivenValidValue(int validValue)
         {
             // Act
-            var volume = new Volume(validValue);
+            var volume = Volume.Create(validValue);
 
             // Assert
             Assert.Equal(validValue, volume.Value);
@@ -26,7 +26,7 @@ public class VolumeShould
         public void ThrowArgumentException_WhenGivenInvalidValue(int invalidValue)
         {
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new Volume(invalidValue));
+            var exception = Assert.Throws<ArgumentException>(() => Volume.Create(invalidValue));
             Assert.Contains("Объем должен быть больше 0", exception.Message);
             Assert.Equal("value", exception.ParamName);
         }
@@ -35,8 +35,8 @@ public class VolumeShould
         public void ReturnTrue_WhenCanAccommodateSmallerVolume()
         {
             // Arrange
-            var currentVolume = new Volume(100);
-            var otherVolume = new Volume(50);
+            var currentVolume = Volume.Create(100);
+            var otherVolume = Volume.Create(50);
 
             // Act
             var canAccommodate = currentVolume.CanAccommodate(otherVolume);
@@ -49,8 +49,8 @@ public class VolumeShould
         public void ReturnTrue_WhenCanAccommodateEqualVolume()
         {
             // Arrange
-            var currentVolume = new Volume(100);
-            var otherVolume = new Volume(100);
+            var currentVolume = Volume.Create(100);
+            var otherVolume = Volume.Create(100);
 
             // Act
             var canAccommodate = currentVolume.CanAccommodate(otherVolume);
@@ -63,8 +63,8 @@ public class VolumeShould
         public void ReturnFalse_WhenCannotAccommodateLargerVolume()
         {
             // Arrange
-            var currentVolume = new Volume(50);
-            var otherVolume = new Volume(100);
+            var currentVolume = Volume.Create(50);
+            var otherVolume = Volume.Create(100);
 
             // Act
             var canAccommodate = currentVolume.CanAccommodate(otherVolume);
@@ -77,7 +77,7 @@ public class VolumeShould
         public void ThrowArgumentNullException_WhenCanAccommodateCalledWithNull()
         {
             // Arrange
-            var volume = new Volume(100);
+            var volume = Volume.Create(100);
 
             // Act & Assert
             var exception = Assert.Throws<ArgumentNullException>(() => volume.CanAccommodate(null));

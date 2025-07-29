@@ -3,7 +3,7 @@ using DeliveryApp.Core.Domain.Model.CourierAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
 using Xunit;
 
-namespace DeliveryApp.UnitTests.Domain.CourierAggregate
+namespace DeliveryApp.UnitTests.Domain.Model.CourierAggregate
 {
     public partial class StoragePlaceShould
     {
@@ -11,11 +11,11 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void ReturnTrue_WhenCanPlaceOrderWithSmallerVolume()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
-            var orderVolume = new Volume(50);
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
+            var orderVolume = Volume.Create(50);
 
             // Act
-            var canPlace = storagePlace.CanPlaceOrder(orderVolume);
+            var canPlace = storagePlace.CanStore(orderVolume);
 
             // Assert
             Assert.True(canPlace);
@@ -25,11 +25,11 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void ReturnFalse_WhenCannotPlaceOrderWithLargerVolume()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
-            var orderVolume = new Volume(150);
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
+            var orderVolume = Volume.Create(150);
 
             // Act
-            var canPlace = storagePlace.CanPlaceOrder(orderVolume);
+            var canPlace = storagePlace.CanStore(orderVolume);
 
             // Assert
             Assert.False(canPlace);
@@ -39,22 +39,22 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void ThrowArgumentNullException_WhenCanPlaceOrderCalledWithNullVolume()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => storagePlace.CanPlaceOrder(null));
+            Assert.Throws<ArgumentNullException>(() => storagePlace.CanStore(null));
         }
 
         [Fact]
         public void ReturnFalse_WhenCanPlaceOrderCalledOnOccupiedStorage()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
             var orderId = Guid.NewGuid();
-            storagePlace.PlaceOrder(orderId, new Volume(50));
+            storagePlace.Store(orderId, Volume.Create(50));
 
             // Act
-            var canPlace = storagePlace.CanPlaceOrder(new Volume(30));
+            var canPlace = storagePlace.CanStore(Volume.Create(30));
 
             // Assert
             Assert.False(canPlace);
@@ -64,29 +64,28 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void PlaceOrder_WhenStorageIsEmptyAndVolumeIsAppropriate()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
             var orderId = Guid.NewGuid();
-            var orderVolume = new Volume(50);
+            var orderVolume = Volume.Create(50);
 
             // Act
-            storagePlace.PlaceOrder(orderId, orderVolume);
+            storagePlace.Store(orderId, orderVolume);
 
             // Assert
             Assert.Equal(orderId, storagePlace.OrderId);
-            Assert.False(storagePlace.IsEmpty);
         }
 
         [Fact]
         public void ThrowInvalidOperationException_WhenPlaceOrderWithExcessiveVolume()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
             var orderId = Guid.NewGuid();
-            var orderVolume = new Volume(150);
+            var orderVolume = Volume.Create(150);
 
             // Act & Assert
             var exception =
-                Assert.Throws<InvalidOperationException>(() => storagePlace.PlaceOrder(orderId, orderVolume));
+                Assert.Throws<InvalidOperationException>(() => storagePlace.Store(orderId, orderVolume));
             Assert.Contains("Объем заказа (150 ед.) превышает объем места хранения (100 ед.)", exception.Message);
         }
 
@@ -94,25 +93,25 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void ThrowArgumentNullException_WhenPlaceOrderCalledWithNullVolume()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
             var orderId = Guid.NewGuid();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => storagePlace.PlaceOrder(orderId, null));
+            Assert.Throws<ArgumentNullException>(() => storagePlace.Store(orderId, null));
         }
 
         [Fact]
         public void ThrowInvalidOperationException_WhenPlaceOrderInOccupiedStorage()
         {
             // Arrange
-            var storagePlace = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storagePlace = StoragePlace.Create("Рюкзак", Volume.Create(100));
             var firstOrderId = Guid.NewGuid();
             var secondOrderId = Guid.NewGuid();
-            storagePlace.PlaceOrder(firstOrderId, new Volume(50));
+            storagePlace.Store(firstOrderId, Volume.Create(50));
 
             // Act & Assert
             var exception =
-                Assert.Throws<InvalidOperationException>(() => storagePlace.PlaceOrder(secondOrderId, new Volume(30)));
+                Assert.Throws<InvalidOperationException>(() => storagePlace.Store(secondOrderId, Volume.Create(30)));
             Assert.Contains("В месте хранения уже находится другой заказ", exception.Message);
         }
     }

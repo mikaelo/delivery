@@ -14,16 +14,28 @@ public class Volume : ValueObject
     public int Value { get; }
     
     /// <summary>
-    /// Конструктор для создания объема
+    /// Конструктор для создания значения объема
     /// </summary>
     /// <param name="value">Значение объема</param>
     /// <exception cref="ArgumentException">Выбрасывается если объем меньше или равен 0</exception>
-    public Volume(int value)
+    private Volume(int value)
+    {
+        Value = value;
+    }
+    
+    /// <summary>
+    /// Создает новое значение объема
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <returns>Volume</returns> 
+    public static Volume Create(int value)
     {
         if (value <= 0)
             throw new ArgumentException("Объем должен быть больше 0", nameof(value));
-
-        Value = value;
+        
+        return new Volume(value);
     }
     
     /// <summary>
