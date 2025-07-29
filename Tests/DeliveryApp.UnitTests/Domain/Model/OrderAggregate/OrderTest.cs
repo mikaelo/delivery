@@ -8,10 +8,10 @@ namespace DeliveryApp.UnitTests.Domain.Model.OrderAggregate;
 
 public class OrderShould
 {
-    private readonly Location _validLocation = Location.Create(1, 1).Value;
+    private readonly Location _validLocation = Location.Create(1, 1);
     private readonly Volume _validVolume = Volume.Create(5);
     private readonly Guid _validOrderId = Guid.NewGuid();
-    private readonly Courier _validCourier = Courier.Create("courier_1", Speed.Create(1), Location.Create(1, 1).Value);
+    private readonly Courier _validCourier = Courier.Create("courier_1", Speed.Create(1), Location.Create(1, 1));
 
     #region Create Order Tests
 
@@ -95,7 +95,7 @@ public class OrderShould
         order.Assign(_validCourier);
 
         // Act & Assert
-        var anotherCourierId = Courier.Create("courier_2", Speed.Create(2), Location.Create(2, 2).Value);
+        var anotherCourierId = Courier.Create("courier_2", Speed.Create(2), Location.Create(2, 2));
         var exception = Assert.Throws<InvalidOperationException>(() => order.Assign(anotherCourierId));
     }
 
@@ -108,7 +108,7 @@ public class OrderShould
         order.Complete();
 
         // Act & Assert
-        var anotherCourierId = Courier.Create("courier_2", Speed.Create(2), Location.Create(2, 2).Value);
+        var anotherCourierId = Courier.Create("courier_2", Speed.Create(2), Location.Create(2, 2));
         var exception = Assert.Throws<InvalidOperationException>(() => order.Assign(anotherCourierId));
     }
 
