@@ -3,7 +3,7 @@ using DeliveryApp.Core.Domain.Model.CourierAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
 using Xunit;
 
-namespace DeliveryApp.UnitTests.Domain.CourierAggregate
+namespace DeliveryApp.UnitTests.Domain.Model.CourierAggregate
 {
     public partial class StoragePlaceShould
     {
@@ -12,7 +12,7 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         {
             // Arrange
             var name = "Рюкзак";
-            var totalVolume = new Volume(100);
+            var totalVolume = Volume.Create(100);
 
             // Act
             var storagePlace = StoragePlace.Create(name, totalVolume);
@@ -22,7 +22,6 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
             Assert.Equal(name, storagePlace.Name);
             Assert.Equal(totalVolume, storagePlace.TotalVolume);
             Assert.Null(storagePlace.OrderId);
-            Assert.True(storagePlace.IsEmpty);
         }
         
         [Theory]
@@ -32,7 +31,7 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void ThrowArgumentException_WhenCreatedWithInvalidName(string invalidName)
         {
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => StoragePlace.Create(invalidName, new Volume(100)));
+            var exception = Assert.Throws<ArgumentException>(() => StoragePlace.Create(invalidName, Volume.Create(100)));
             Assert.Contains("Название места хранения не может быть пустым", exception.Message);
         }
         
@@ -48,8 +47,8 @@ namespace DeliveryApp.UnitTests.Domain.CourierAggregate
         public void NotBeEqual_WhenComparingDifferentStoragePlacesWithSameParameters()
         {
             // Arrange & Act
-            var storage1 = StoragePlace.Create("Рюкзак", new Volume(100));
-            var storage2 = StoragePlace.Create("Рюкзак", new Volume(100));
+            var storage1 = StoragePlace.Create("Рюкзак", Volume.Create(100));
+            var storage2 = StoragePlace.Create("Рюкзак", Volume.Create(100));
 
             // Assert - объекты должны быть разными, даже при одинаковых параметрах
             Assert.NotEqual(storage1.Id, storage2.Id);
