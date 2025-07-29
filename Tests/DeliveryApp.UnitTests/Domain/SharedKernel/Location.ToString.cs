@@ -13,7 +13,7 @@ public partial class LocationShould
     public void FormatAsCoordinateString_WhenConverted(int x, int y, string expected)
     {
         // Arrange
-        var location = Location.Create(x, y).Value;
+        var location = Location.Create(x, y);
 
         // Act
         var result = location.ToString();

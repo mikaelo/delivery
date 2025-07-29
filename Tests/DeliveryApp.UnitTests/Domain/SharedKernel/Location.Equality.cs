@@ -10,8 +10,8 @@ public partial class LocationShould
     public void BeEqual_WhenCoordinatesAreIdentical()
     {
         // Arrange
-        var location1 = Location.Create(5, 7).Value;
-        var location2 = Location.Create(5, 7).Value;
+        var location1 = Location.Create(5, 7);
+        var location2 = Location.Create(5, 7);
 
         // Act & Assert
         location1.Equals(location2).Should().BeTrue();
@@ -23,9 +23,9 @@ public partial class LocationShould
     public void NotBeEqual_WhenCoordinatesDiffer()
     {
         // Arrange
-        var location1 = Location.Create(5, 7).Value;
-        var location2 = Location.Create(5, 8).Value;
-        var location3 = Location.Create(6, 7).Value;
+        var location1 = Location.Create(5, 7);
+        var location2 = Location.Create(5, 8);
+        var location3 = Location.Create(6, 7);
 
         // Act & Assert
         location1.Equals(location2).Should().BeFalse();

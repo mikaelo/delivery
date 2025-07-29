@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Core.Domain.SharedKernel;
+﻿using System;
+using DeliveryApp.Core.Domain.SharedKernel;
 using FluentAssertions;
 using Xunit;
 
@@ -15,15 +16,14 @@ public partial class LocationShould
         int startX, int startY, int deltaX, int deltaY, int expectedX, int expectedY)
     {
         // Arrange
-        var location = Location.Create(startX, startY).Value;
+        var location = Location.Create(startX, startY);
 
         // Act
         var result = location.Move(deltaX, deltaY);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.X.Should().Be(expectedX);
-        result.Value.Y.Should().Be(expectedY);
+        result.X.Should().Be(expectedX);
+        result.Y.Should().Be(expectedY);
     }
 
     [Theory]
@@ -36,13 +36,11 @@ public partial class LocationShould
     public void FailToMove_WhenDeltaResultsInInvalidCoordinates(int startX, int startY, int deltaX, int deltaY)
     {
         // Arrange
-        var location = Location.Create(startX, startY).Value;
+        var location = Location.Create(startX, startY);
 
         // Act
-        var result = location.Move(deltaX, deltaY);
-
+        
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().NotBeEmpty();
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => location.Move(deltaX, deltaY));
     }
 }

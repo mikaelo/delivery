@@ -19,8 +19,8 @@ public partial class LocationShould
         int x1, int y1, int x2, int y2, int expectedDistance)
     {
         // Arrange
-        var location1 = Location.Create(x1, y1).Value;
-        var location2 = Location.Create(x2, y2).Value;
+        var location1 = Location.Create(x1, y1);
+        var location2 = Location.Create(x2, y2);
 
         // Act
         var distance = location1.DistanceTo(location2);
@@ -33,8 +33,8 @@ public partial class LocationShould
     public void CalculateSymmetricDistance_InBothDirections()
     {
         // Arrange
-        var location1 = Location.Create(3, 4).Value;
-        var location2 = Location.Create(7, 8).Value;
+        var location1 = Location.Create(3, 4);
+        var location2 = Location.Create(7, 8);
 
         // Act
         var distance1to2 = location1.DistanceTo(location2);
@@ -48,7 +48,7 @@ public partial class LocationShould
     public void ThrowArgumentNullException_WhenCalculatingDistanceToNull()
     {
         // Arrange
-        var location = Location.Create(5, 5).Value;
+        var location = Location.Create(5, 5);
 
         // Act & Assert
         var act = () => location.DistanceTo(null);

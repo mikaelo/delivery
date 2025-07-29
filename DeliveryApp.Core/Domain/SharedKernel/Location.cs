@@ -63,8 +63,9 @@ public class Location : ValueObject
     /// </summary>
     /// <param name="deltaX">Сдвиг по X</param>
     /// <param name="deltaY">Сдвиг по Y</param>
-    /// <returns>Result с новой координатой Location или сообщением об ошибке</returns>
-    public Result<Location> Move(int deltaX, int deltaY)
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <returns>Новая координата Location</returns>
+    public Location Move(int deltaX, int deltaY)
     {
         return Create(X + deltaX, Y + deltaY);
     }
@@ -74,8 +75,9 @@ public class Location : ValueObject
     /// </summary>
     /// <param name="newX">Новая координата X</param>
     /// <param name="newY">Новая координата Y</param>
-    /// <returns>Result с новой координатой Location или сообщением об ошибке</returns>
-    public Result<Location> MoveTo(int newX, int newY)
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <returns>Новая координата Location</returns>
+    public Location MoveTo(int newX, int newY)
     {
         return Create(newX, newY);
     }
@@ -85,16 +87,17 @@ public class Location : ValueObject
     /// </summary>
     /// <param name="x">Координата по горизонтали</param>
     /// <param name="y">Координата по вертикали</param>
-    /// <returns>Result с Location или сообщением об ошибке</returns> 
-    public static Result<Location> Create(int x, int y)
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <returns>Location</returns> 
+    public static Location Create(int x, int y)
     {
         if (x < MinCoordinates.X || x > MaxCoordinates.X)
-            return Result.Failure<Location>($"Координата X должна быть в диапазоне от {MinCoordinates.X} до {MaxCoordinates.X}. Получено: {x}");
+            throw new ArgumentOutOfRangeException(nameof(x), $"Координата X должна быть в диапазоне от {MinCoordinates.X} до {MaxCoordinates.X}. Получено: {x}");
             
         if (y < MinCoordinates.Y || y > MaxCoordinates.Y)
-            return Result.Failure<Location>($"Координата Y должна быть в диапазоне от {MinCoordinates.Y} до {MaxCoordinates.Y}. Получено: {y}");
-            
-        return Result.Success(new Location(x, y));
+            throw new ArgumentOutOfRangeException(nameof(y),$"Координата Y должна быть в диапазоне от {MinCoordinates.Y} до {MaxCoordinates.Y}. Получено: {y}");
+
+        return new Location(x, y);
     }
     
     
