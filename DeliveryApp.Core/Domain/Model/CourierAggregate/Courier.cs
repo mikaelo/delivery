@@ -1,18 +1,21 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DeliveryApp.Core.Domain.Model.OrderAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
+using Primitives;
 
 namespace DeliveryApp.Core.Domain.Model.CourierAggregate;
 
 // Главный класс курьера
-    public class Courier
+    public class Courier : Aggregate<Guid>
     {
-        public Guid Id { get; }
         public string Name { get; }
         public Speed Speed { get; }
         public Location Location { get; private set; }
         public List<StoragePlace> StoragePlaces { get; private set; }
 
+        // Приватный конструктор для Entity Framework или десериализации
+        private Courier() { }
+        
         // Приватный конструктор
         private Courier(string name, Speed speed, Location location, StoragePlace storagePlace)
         {

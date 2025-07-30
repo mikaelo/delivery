@@ -1,11 +1,11 @@
 ﻿using DeliveryApp.Core.Domain.Model.CourierAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
+using Primitives;
 
 namespace DeliveryApp.Core.Domain.Model.OrderAggregate;
 
-    public class Order
+    public class Order : Aggregate<Guid>
     {
-        public Guid Id { get; }
         public Location Location { get; }
         public Volume Volume { get; }
         public OrderStatus Status { get; private set; }
