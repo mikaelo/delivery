@@ -14,12 +14,13 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate;
         public List<StoragePlace> StoragePlaces { get; private set; }
 
         // Приватный конструктор для Entity Framework или десериализации
+        [ExcludeFromCodeCoverage]
         private Courier() { }
         
         // Приватный конструктор
         private Courier(string name, Speed speed, Location location, StoragePlace storagePlace)
         {
-            Id = Guid.NewGuid();
+            Id = Guid.CreateVersion7();
             Name = name;
             Speed = speed;
             Location = location;
