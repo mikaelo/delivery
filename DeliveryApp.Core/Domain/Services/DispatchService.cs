@@ -20,8 +20,11 @@ public class DispatchService : IDispatchService
             .OrderBy(cs => cs.CalculateTimeToLocation(order.Location))
             .First();
         
-        //order.Assign(fastestCourier);
-        fastestCourier.TakeOrder(order); // внутри курьера в order прописывается courier ?
+        // сервис назначает на заказ курьера
+        order.Assign(fastestCourier);
+        
+        // сервис назначает курьеру заказ
+        fastestCourier.TakeOrder(order); 
         
         return fastestCourier;
     }

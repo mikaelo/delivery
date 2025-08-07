@@ -156,8 +156,6 @@ namespace DeliveryApp.UnitTests.Domain.Model.CourierAggregate
             // Assert
             var storage = courier.StoragePlaces.First();
             Assert.Equal(order.Id, storage.OrderId);
-            Assert.Equal(courier.Id, order.CourierId);
-            Assert.Equal(OrderStatus.Assigned, order.Status);
         }
 
         [Fact]
@@ -208,7 +206,6 @@ namespace DeliveryApp.UnitTests.Domain.Model.CourierAggregate
             // Assert
             var storage = courier.StoragePlaces.First();
             Assert.Null(storage.OrderId);
-            Assert.Equal(OrderStatus.Completed, order.Status);
         }
 
         [Fact]
