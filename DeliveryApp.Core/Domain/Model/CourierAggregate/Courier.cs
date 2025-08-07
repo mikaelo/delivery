@@ -74,7 +74,6 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate;
                 throw new InvalidOperationException("No available storage place for this order");
             
             availableStorage.Store(order.Id, order.Volume);
-            order.Assign(this);
         }
 
         // Завершить заказ
@@ -89,7 +88,6 @@ namespace DeliveryApp.Core.Domain.Model.CourierAggregate;
                 throw new InvalidOperationException("Order not found in courier's storage");
 
             storageWithOrder.Clear();
-            order.Complete();
         }
 
         // Рассчитать количество тактов для доставки до указанной локации
