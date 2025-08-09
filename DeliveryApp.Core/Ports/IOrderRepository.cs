@@ -5,7 +5,7 @@ using Primitives;
 namespace DeliveryApp.Core.Ports;
 
 /// <summary>
-///     Repository для Aggregate OrderDTO
+///     Repository для Aggregate Order
 /// </summary>
 public interface IOrderRepository : IRepository<Order>
 {

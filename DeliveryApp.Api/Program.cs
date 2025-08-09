@@ -41,7 +41,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Repositories
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
+builder.Services.AddScoped<ICourierRepository, CourierRepository>();
 
 var app = builder.Build();
 
