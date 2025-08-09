@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CSharpFunctionalExtensions;
-using DeliveryApp.Core.Domain.SharedKernel;
+using DeliveryApp.Core.Domain.Model.SharedKernel;
 
 namespace DeliveryApp.Core.Domain.Model.CourierAggregate
 {

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CSharpFunctionalExtensions;
 
-namespace DeliveryApp.Core.Domain.SharedKernel;
+namespace DeliveryApp.Core.Domain.Model.SharedKernel;
 
 /// <summary>
 /// Value Object для представления скорости
@@ -12,6 +12,11 @@ public class Speed : ValueObject
     /// Значение скорости
     /// </summary>
     public int Value { get; }
+    
+    [ExcludeFromCodeCoverage]
+    private Speed()
+    {
+    }
     
     /// <summary>
     /// Конструктор для создания значения скорости

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using DeliveryApp.Core.Domain.Model.CourierAggregate;
 using DeliveryApp.Core.Domain.Model.OrderAggregate;
+using DeliveryApp.Core.Domain.Model.SharedKernel;
 using DeliveryApp.Core.Domain.Services;
-using DeliveryApp.Core.Domain.SharedKernel;
 using Xunit;
 
 namespace DeliveryApp.UnitTests.Domain.Services;
