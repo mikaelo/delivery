@@ -1,5 +1,5 @@
 ﻿using DeliveryApp.Core.Domain.Model.CourierAggregate;
-using DeliveryApp.Core.Domain.SharedKernel;
+using DeliveryApp.Core.Domain.Model.SharedKernel;
 using Primitives;
 
 namespace DeliveryApp.Core.Domain.Model.OrderAggregate;

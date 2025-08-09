@@ -1,15 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
 using CSharpFunctionalExtensions;
 
-namespace DeliveryApp.Core.Domain.SharedKernel;
+namespace DeliveryApp.Core.Domain.Model.SharedKernel;
 
 /// <summary>
 /// Координата
 /// </summary>
 public class Location : ValueObject
 {
-    public static readonly Location MinCoordinates = new(1, 1);
-    public static readonly Location MaxCoordinates = new(10, 10);
+    public static Location MinCoordinates => new(1, 1);
+    public static Location MaxCoordinates => new(10, 10);
     
     /// <summary>
     /// X (горизонталь)
@@ -115,5 +115,4 @@ public class Location : ValueObject
         
         return new Location(randomX, randomY);
     }
-    
 }
