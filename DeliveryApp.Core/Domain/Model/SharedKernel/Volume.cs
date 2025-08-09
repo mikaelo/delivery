@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CSharpFunctionalExtensions;
 
-namespace DeliveryApp.Core.Domain.SharedKernel;
+namespace DeliveryApp.Core.Domain.Model.SharedKernel;
 
 /// <summary>
 /// Value Object для представления объема
@@ -13,12 +13,17 @@ public class Volume : ValueObject
     /// </summary>
     public int Value { get; }
     
+    [ExcludeFromCodeCoverage]
+    private Volume()
+    {
+    }
+    
     /// <summary>
     /// Конструктор для создания значения объема
     /// </summary>
     /// <param name="value">Значение объема</param>
     /// <exception cref="ArgumentException">Выбрасывается если объем меньше или равен 0</exception>
-    private Volume(int value)
+    private Volume(int value) : this()
     {
         Value = value;
     }

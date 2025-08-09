@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DeliveryApp.Core.Domain.Model.OrderAggregate;
-using DeliveryApp.Core.Domain.SharedKernel;
+using DeliveryApp.Core.Domain.Model.SharedKernel;
 using Primitives;
 
 namespace DeliveryApp.Core.Domain.Model.CourierAggregate;
