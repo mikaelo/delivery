@@ -17,7 +17,7 @@ public class OrderRepositoryShould : IAsyncLifetime
     /// </summary>
     /// <remarks>По сути это Docker контейнер с Postgres</remarks>
     private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:14.7")
+        .WithImage("postgres:17.5")
         .WithDatabase("order")
         .WithUsername("username")
         .WithPassword("secret")
