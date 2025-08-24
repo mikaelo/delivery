@@ -39,5 +39,5 @@ public interface IOrderRepository : IRepository<Order>
     ///     Получить все назначенные заказы
     /// </summary>
     /// <returns>Заказы</returns>
-    IEnumerable<Order> GetAllInAssignedStatus();
+    Task<IReadOnlyCollection<Order>> GetAllInAssignedStatus();
 }

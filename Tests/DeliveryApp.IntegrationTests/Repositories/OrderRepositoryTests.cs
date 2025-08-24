@@ -184,4 +184,37 @@ public class OrderRepositoryShould : IAsyncLifetime
         first.Value.Location.Should().Be(Location.MinCoordinates);
         second.Value.Location.Should().Be(Location.MinCoordinates);
     }
+    
+    [Fact]
+    public async Task GetAllInAssignedStatus()
+    {
+        //Arrange
+        var courier1 = Courier.Create( "Pedestrian", Speed.Create(1), Location.Create(1, 1));
+        var courier2 = Courier.Create( "Bike", Speed.Create(2), Location.Create(1, 1));
+
+        var order1Id = Guid.CreateVersion7();
+        var order1 = Order.Create(order1Id, Location.MinCoordinates, Volume.Create(5));
+        order1.Assign(courier1);
+
+        var order2Id = Guid.CreateVersion7();
+        var order2 = Order.Create(order2Id, Location.MinCoordinates, Volume.Create(5));
+        order2.Assign(courier2);
+        
+        var orderRepository = new OrderRepository(_context);
+        await orderRepository.AddAsync(order1);
+        await orderRepository.AddAsync(order2);
+
+        var unitOfWork = new UnitOfWork(_context);
+        await unitOfWork.SaveChangesAsync();
+
+        //Act
+        var getAllInAssignedStatusResult = await orderRepository.GetAllInAssignedStatus();
+
+        //Assert
+        getAllInAssignedStatusResult.Count().Should().Be(2);
+
+        getAllInAssignedStatusResult.SingleOrDefault(x => x.Id == order1Id).Should().NotBeNull();
+        
+        getAllInAssignedStatusResult.SingleOrDefault(x => x.Id == order2Id).Should().NotBeNull();
+    }
 }

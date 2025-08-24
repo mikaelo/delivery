@@ -33,5 +33,5 @@ public interface ICourierRepository : IRepository<Courier>
     /// Найти всех свободных курьеров
     /// </summary>
     /// <returns></returns>
-    IEnumerable<Courier> FindAllFree();
+    Task<IReadOnlyCollection<Courier>> FindAllFree();
 }
