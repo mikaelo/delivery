@@ -150,7 +150,7 @@ public class CourierRepositoryShould : IAsyncLifetime
         var activeCouriersFromDb = repository.FindAllFree();
 
         //Assert
-        var couriersFromDb = activeCouriersFromDb.ToList();
+        var couriersFromDb = await activeCouriersFromDb;
         couriersFromDb.Should().NotBeEmpty();
         couriersFromDb.Count().Should().Be(1);
         couriersFromDb.First().Should().BeEquivalentTo(courier2);
