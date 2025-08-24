@@ -138,21 +138,24 @@ public class CourierRepositoryShould : IAsyncLifetime
         var courier1 = Courier.Create("Courier1", Speed.Create(1), Location.MinCoordinates);
         courier1.TakeOrder(order);
 
-        var courier2 = Courier.Create( "Courier 2",Speed.Create(1), Location.MinCoordinates);
+        var courier2 = Courier.Create( "Courier 2", Speed.Create(1), Location.MinCoordinates);
+        var courier3 = Courier.Create( "Courier 3", Speed.Create(3), Location.MinCoordinates);
 
         var repository = new CourierRepository(_context);
         var unitOfWork = new UnitOfWork(_context);
         await repository.AddAsync(courier1);
         await repository.AddAsync(courier2);
+        await repository.AddAsync(courier3);
         await unitOfWork.SaveChangesAsync();
 
         //Act
-        var activeCouriersFromDb = repository.FindAllFree();
+        var freeCouriersFromDb = await repository.FindAllFree();
 
         //Assert
-        var couriersFromDb = await activeCouriersFromDb;
-        couriersFromDb.Should().NotBeEmpty();
-        couriersFromDb.Count().Should().Be(1);
-        couriersFromDb.First().Should().BeEquivalentTo(courier2);
+        freeCouriersFromDb.Should().NotBeEmpty();
+        freeCouriersFromDb.Count().Should().Be(2);
+
+        freeCouriersFromDb.SingleOrDefault(x => x.Id == courier2.Id).Should().BeEquivalentTo(courier2);
+        freeCouriersFromDb.SingleOrDefault(x => x.Id == courier3.Id).Should().BeEquivalentTo(courier3);
     }
 }

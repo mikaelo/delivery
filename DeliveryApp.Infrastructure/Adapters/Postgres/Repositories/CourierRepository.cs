@@ -38,8 +38,9 @@ public class CourierRepository : ICourierRepository
         var couriers = await _dbContext
             .Couriers
             .Include(x => x.StoragePlaces)
-            .Where(o => o.StoragePlaces.All(c=>c.OrderId == null)).
-                ToListAsync();
+            .Where(o => o.StoragePlaces.All(c=>c.OrderId == null))
+            .ToListAsync();
+        
         return couriers;
     }
 }
