@@ -43,6 +43,7 @@
     <ItemGroup>
         <ProjectReference Include="..\DeliveryApp.Core\DeliveryApp.Core.csproj" />
         <ProjectReference Include="..\DeliveryApp.Infrastructure\DeliveryApp.Infrastructure.csproj" />
+        <ProjectReference Include="..\DeliveryApp.Queries\DeliveryApp.Queries.csproj" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Adapters\Kafka\BasketConfirmed\Contract.proto" />
