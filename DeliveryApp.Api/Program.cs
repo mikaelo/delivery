@@ -1,8 +1,16 @@
+using System.Reflection;
+using CSharpFunctionalExtensions;
 using DeliveryApp.Api;
+using DeliveryApp.Core.Application.UseCases.Commands.AssignOrders;
+using DeliveryApp.Core.Application.UseCases.Commands.CreateOrder;
+using DeliveryApp.Core.Application.UseCases.Commands.MoveCouriers;
 using DeliveryApp.Core.Domain.Services;
 using DeliveryApp.Core.Ports;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
+using DeliveryApp.Queries.UseCases.GetAllCouriers;
+using DeliveryApp.Queries.UseCases.GetNotCompletedOrders;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Primitives;
 
@@ -42,6 +50,22 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Repositories
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICourierRepository, CourierRepository>();
+
+// Mediator (TODO: одумать как от него избавиться)
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.Lifetime = ServiceLifetime.Scoped;
+});
+
+// Commands
+builder.Services.AddScoped<IRequestHandler<CreateOrderCommand, Unit>, CreateOrderHandler>();
+builder.Services.AddScoped<IRequestHandler<MoveCouriersCommand, Unit>, MoveCouriersHandler>();
+builder.Services.AddScoped<IRequestHandler<AssignOrdersCommand, Unit>, AssignOrdersHandler>();
+
+// Queries (очень не красиво, подумать)
+builder.Services.AddScoped<IRequestHandler<GetNotCompletedOrdersQuery, GetNotCompletedOrdersResult>>(_ => new GetNotCompletedOrdersHandler(connectionString));
+builder.Services.AddScoped<IRequestHandler<GetAllCouriersQuery, GetAllCouriersResult>>(_ => new GetAllCouriersHandler(connectionString));
 
 var app = builder.Build();
 
