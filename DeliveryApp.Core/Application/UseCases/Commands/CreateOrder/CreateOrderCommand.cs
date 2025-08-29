@@ -23,6 +23,7 @@ public class CreateOrderCommand : IRequest<Unit>
     {
         ArgumentOutOfRangeException.ThrowIfEqual(orderId, Guid.Empty);
         ArgumentException.ThrowIfNullOrEmpty(index);
+        ArgumentNullException.ThrowIfNull(volume);
         
         return new CreateOrderCommand(orderId, index, volume);
     }

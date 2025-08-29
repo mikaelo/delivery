@@ -28,13 +28,13 @@ public class AssignOrdersHandler : IRequestHandler<AssignOrdersCommand, Unit>
     {
         var createdOrder = await _orderRepository.GetFirstInCreatedStatusAsync();
         if (createdOrder.HasNoValue)
-            throw new Exception("No orders found"); // TODO: возможно result лучше exception если это ожидаемое поведение
+            return Unit.Value;
         
         var order = createdOrder.Value;
 
         var availableCouriers = await _courierRepository.FindAllFree();
         if (availableCouriers.Count == 0) 
-            throw new Exception("No free couriers found"); // TODO: возможно result лучше exception если это ожидаемое поведение
+            throw new FreeCourierNotFoundException();
         
         var dispatchResult = _dispatchService.Dispatch(order, availableCouriers);
         var courier = dispatchResult.Value;
