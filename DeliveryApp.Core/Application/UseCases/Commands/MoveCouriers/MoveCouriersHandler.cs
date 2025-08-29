@@ -23,7 +23,6 @@ public class MoveCouriersHandler : IRequestHandler<MoveCouriersCommand, Unit>
 
     public async Task<Unit> Handle(MoveCouriersCommand message, CancellationToken cancellationToken)
     {
-        // Восстанавливаем агрегаты
         var assignedOrders = await _orderRepository.GetAllInAssignedStatus();
         if (assignedOrders.Count == 0) 
             return Unit.Value;
@@ -32,11 +31,11 @@ public class MoveCouriersHandler : IRequestHandler<MoveCouriersCommand, Unit>
         {
             // TODO: такой ситуации не должно быть
             if (order.CourierId == null)
-                throw new ArgumentException($"Order {order.Id} has not assigned courier");
+                throw new OrderHasNoAssignedCourierException(order.Id);
 
             var orderCourier = await _courierRepository.GetAsync(order.CourierId.Value);
             if (orderCourier.HasNoValue) // TODO: такой ситуации не должно быть
-                throw new ArgumentException($"Courier {order.CourierId.Value} was not found");
+                throw new OrderCourierNotFoundException(order.Id, order.CourierId.Value);
 
             var courier = orderCourier.Value;
             courier.Move(order.Location);

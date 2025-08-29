@@ -21,4 +21,8 @@
         <ProjectReference Include="..\Utils\Primitives\Primitives.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain\Exceptions\" />
+    </ItemGroup>
+
 </Project>

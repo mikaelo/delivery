@@ -23,7 +23,7 @@ public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Unit>
     {
         var getOrderResult = await _orderRepository.GetAsync(message.OrderId);
         if (getOrderResult.HasValue)
-            throw new ArgumentNullException($"Order {message.OrderId} already exists");
+            throw new OrderAlreadyExistsException(message.OrderId);
         
         var location = Location.CreateRandom(Random);
         
