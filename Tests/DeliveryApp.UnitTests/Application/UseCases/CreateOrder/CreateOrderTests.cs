@@ -39,7 +39,7 @@ public class CreateOrderHandlerShould
 
         //Assert
         
-        await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(command, CancellationToken.None));
+        await Assert.ThrowsAsync<OrderAlreadyExistsException>(() => handler.Handle(command, CancellationToken.None));
     }
 
     [Fact]

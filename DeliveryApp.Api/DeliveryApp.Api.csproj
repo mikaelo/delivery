@@ -30,14 +30,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Quartz" Version="3.14.0" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="9.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.5" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="9.0.5" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.5" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.5" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
     </ItemGroup>
     <ItemGroup>
