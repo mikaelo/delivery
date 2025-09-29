@@ -34,7 +34,7 @@ public class AssignOrdersHandler : IRequestHandler<AssignOrdersCommand, Unit>
 
         var availableCouriers = await _courierRepository.FindAllFree();
         if (availableCouriers.Count == 0) 
-            throw new FreeCourierNotFoundException();
+            return Unit.Value; //throw new FreeCourierNotFoundException(); //- не является ошибкой, но возможно понадобится в метриках
         
         var dispatchResult = _dispatchService.Dispatch(order, availableCouriers);
         var courier = dispatchResult.Value;

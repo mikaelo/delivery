@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -31,10 +32,12 @@ public class AssignOrdersShould
         var courier = Courier.Create("courier", Speed.Create(1), Location.Create(1, 1));
         
         _orderRepositoryMock.GetFirstInCreatedStatusAsync()
-            .Returns(Task.FromResult(Maybe<Order>.From(order)));
+            .Returns(Maybe<Order>.From(order));
+
+        var freeCouriers = (new List<Courier> { courier }).AsReadOnly();
         
-        _courierRepository.GetAsync(Arg.Is(courier.Id))
-            .Returns(Task.FromResult(Maybe<Courier>.From(courier)));
+        _courierRepository.FindAllFree()
+            .Returns(freeCouriers);
 
         var dispatchService = new DispatchService();
         
