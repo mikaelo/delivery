@@ -31,7 +31,7 @@ public class DeliveryController : DefaultApiController
         // TODO: добавить GlobalExceptionHandler
         
         var orderId = Guid.CreateVersion7();
-        var street = "Unknown";
+        var street = "Тестировочная";
         var command = CreateOrderCommand.Create(orderId, street, Volume.Create(5));
         await _mediator.Send(command);
         

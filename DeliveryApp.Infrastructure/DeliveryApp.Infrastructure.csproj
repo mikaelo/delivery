@@ -39,4 +39,18 @@
         <None Remove="Adapters\Grpc\GeoService\Contract.proto"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Adapters\Grpc\geo.proto" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Protobuf Include="Adapters\Grpc\GeoService\geo.proto">
+        <GrpcServices>Both</GrpcServices>
+        <Access>Public</Access>
+        <ProtoCompile>True</ProtoCompile>
+        <CompileOutputs>True</CompileOutputs>
+        <OutputDir>obj\Debug\net9.0\</OutputDir>
+      </Protobuf>
+    </ItemGroup>
+
 </Project>
