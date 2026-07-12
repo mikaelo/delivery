@@ -6,6 +6,7 @@ using DeliveryApp.Core.Application.UseCases.Commands.CreateOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.MoveCouriers;
 using DeliveryApp.Core.Domain.Services;
 using DeliveryApp.Core.Ports;
+using DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
 using DeliveryApp.Queries.UseCases.GetAllCouriers;
@@ -110,6 +111,9 @@ builder.Services.AddControllers(options =>
         });
     });
 
+// gRPC
+var geoServiceGrpcHost = builder.Configuration["GEO_SERVICE_GRPC_HOST"];
+builder.Services.AddTransient<IGeoClient, GeoClient>(_ => new GeoClient(geoServiceGrpcHost));
 
 // Swagger
 builder.Services.AddSwaggerGen(options =>
