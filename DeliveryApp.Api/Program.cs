@@ -112,8 +112,7 @@ builder.Services.AddControllers(options =>
     });
 
 // gRPC
-var geoServiceGrpcHost = builder.Configuration["GEO_SERVICE_GRPC_HOST"];
-builder.Services.AddTransient<IGeoClient, GeoClient>(_ => new GeoClient(geoServiceGrpcHost));
+builder.Services.AddSingleton<IGeoClient, GeoClient>();
 
 // Swagger
 builder.Services.AddSwaggerGen(options =>
