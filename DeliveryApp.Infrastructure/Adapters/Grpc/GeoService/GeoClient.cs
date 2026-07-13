@@ -3,6 +3,7 @@ using DeliveryApp.Core.Ports;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Configuration;
+using Microsoft.Extensions.Options;
 using Location = DeliveryApp.Core.Domain.Model.SharedKernel.Location;
 
 namespace DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
@@ -14,12 +15,15 @@ public class GeoClient : IGeoClient
     private readonly MethodConfig _methodConfig;
 
     
-    public GeoClient(string endpoint)
+    public GeoClient(IOptions<Settings> settings)
     {
-        if (string.IsNullOrWhiteSpace(endpoint)) 
-            throw new ArgumentNullException(nameof(endpoint));
+        if (settings?.Value == null) 
+            throw new ArgumentNullException(nameof(settings));
         
-        _endpoint = endpoint;
+        if (string.IsNullOrWhiteSpace(settings.Value.GeoServiceGrpcHost)) 
+            throw new ArgumentNullException(nameof(settings.Value.GeoServiceGrpcHost));
+        
+        _endpoint = settings.Value.GeoServiceGrpcHost;
 
         _socketsHttpHandler = new SocketsHttpHandler
         {
