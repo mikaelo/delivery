@@ -1,6 +1,7 @@
 using System.Reflection;
 using DeliveryApp.Api;
 using DeliveryApp.Api.Adapters.BackgroundJobs;
+using DeliveryApp.Api.Adapters.Kafka.BasketConfirmed;
 using DeliveryApp.Core.Application.UseCases.Commands.AssignOrders;
 using DeliveryApp.Core.Application.UseCases.Commands.CreateOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.MoveCouriers;
@@ -137,6 +138,17 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
+// Background services
+
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.BackgroundServiceExceptionBehavior =
+        BackgroundServiceExceptionBehavior.StopHost;
+    options.ShutdownTimeout = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddHostedService<ConsumerService>();
+
 var app = builder.Build();
 
 // -----------------------------------
@@ -164,10 +176,10 @@ app.UseCors();
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 // Apply Migrations
-// using (var scope = app.Services.CreateScope())
-// {
-//     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//     db.Database.Migrate();
-// }
+using (var scope = app.Services.CreateScope())
+{
+     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+     db.Database.Migrate();
+}
 
 app.Run();
