@@ -1,4 +1,5 @@
 ﻿using DeliveryApp.Core.Domain.Model.CourierAggregate;
+using DeliveryApp.Core.Domain.Model.OrderAggregate.DomainEvents;
 using DeliveryApp.Core.Domain.Model.SharedKernel;
 using Primitives;
 
@@ -49,6 +50,8 @@ namespace DeliveryApp.Core.Domain.Model.OrderAggregate;
 
             CourierId = courier.Id;
             Status = OrderStatus.Assigned;
+            
+            RaiseDomainEvent(new OrderAssignedDomainEvent(Id));
         }
 
         // Метод для завершения заказа
@@ -58,6 +61,8 @@ namespace DeliveryApp.Core.Domain.Model.OrderAggregate;
                 throw new InvalidOperationException($"Cannot complete order with status {Status}. Order must be assigned to a courier first.");
             
             Status = OrderStatus.Completed;
+            
+            RaiseDomainEvent(new OrderCompletedDomainEvent(Id));
         }
         
     }

@@ -1,16 +1,19 @@
-﻿using Primitives;
+﻿using MediatR;
+using Primitives;
 
 namespace DeliveryApp.Infrastructure.Adapters.Postgres;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
 
     private bool _disposed;
 
-    public UnitOfWork(ApplicationDbContext dbContext)
+    public UnitOfWork(ApplicationDbContext dbContext, IMediator mediator)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _mediator = mediator;
     }
 
     public void Dispose()
@@ -22,6 +25,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _dbContext.SaveChangesAsync(cancellationToken);
+        await PublishDomainEventsAsync();
         return true;
     }
 
@@ -31,6 +35,25 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         {
             if (disposing) _dbContext.Dispose();
             _disposed = true;
+        }
+    }
+    
+    private async Task PublishDomainEventsAsync()
+    {
+        var domainEntities = _dbContext.ChangeTracker
+            .Entries<IAggregateRoot>()
+            .Where(e => e.Entity.GetDomainEvents().Any())
+            .ToList();
+        
+        var domainEvents = domainEntities
+            .SelectMany(e => e.Entity.GetDomainEvents())
+            .ToList();
+        
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+        
+        foreach (var domainEvent in domainEvents)
+        {
+            await _mediator.Publish(domainEvent);
         }
     }
 }

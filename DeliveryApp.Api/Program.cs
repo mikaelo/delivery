@@ -2,12 +2,16 @@ using System.Reflection;
 using DeliveryApp.Api;
 using DeliveryApp.Api.Adapters.BackgroundJobs;
 using DeliveryApp.Api.Adapters.Kafka.BasketConfirmed;
+using DeliveryApp.Core.Application.EventHandlers.OrderAssigned;
+using DeliveryApp.Core.Application.EventHandlers.OrderCompleted;
 using DeliveryApp.Core.Application.UseCases.Commands.AssignOrders;
 using DeliveryApp.Core.Application.UseCases.Commands.CreateOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.MoveCouriers;
+using DeliveryApp.Core.Domain.Model.OrderAggregate.DomainEvents;
 using DeliveryApp.Core.Domain.Services;
 using DeliveryApp.Core.Ports;
 using DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
+using DeliveryApp.Infrastructure.Adapters.Kafka;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
 using DeliveryApp.Queries.UseCases.GetAllCouriers;
@@ -75,6 +79,10 @@ builder.Services.AddScoped<IRequestHandler<AssignOrdersCommand, Unit>, AssignOrd
 // Queries (очень не красиво, подумать)
 builder.Services.AddScoped<IRequestHandler<GetNotCompletedOrdersQuery, GetNotCompletedOrdersResult>>(_ => new GetNotCompletedOrdersHandler(connectionString));
 builder.Services.AddScoped<IRequestHandler<GetAllCouriersQuery, GetAllCouriersResult>>(_ => new GetAllCouriersHandler(connectionString));
+
+// Notifications
+builder.Services.AddScoped<INotificationHandler<OrderAssignedDomainEvent>, OrderAssignedHandler>();
+builder.Services.AddScoped<INotificationHandler<OrderCompletedDomainEvent>, OrderCompletedHandler>();
 
 // CRON Jobs
 builder.Services.AddQuartz(configure =>
@@ -149,6 +157,8 @@ builder.Services.Configure<HostOptions>(options =>
 
 builder.Services.AddHostedService<ConsumerService>();
 
+builder.Services.AddSingleton<IOrderEventsProducer, OrderEventsProducer>();
+
 var app = builder.Build();
 
 // -----------------------------------
@@ -176,6 +186,7 @@ app.UseCors();
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 // Apply Migrations
+
 using (var scope = app.Services.CreateScope())
 {
      var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
