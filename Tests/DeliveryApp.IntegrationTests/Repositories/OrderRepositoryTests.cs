@@ -4,7 +4,9 @@ using DeliveryApp.Core.Domain.Model.SharedKernel;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
 using FluentAssertions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -25,6 +27,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         .Build();
 
     private ApplicationDbContext _context;
+    private readonly IMediator _mediator;
 
     /// <summary>
     ///     Ctr
@@ -32,7 +35,7 @@ public class OrderRepositoryShould : IAsyncLifetime
     /// <remarks>Вызывается один раз перед всеми тестами в рамках этого класса</remarks>
     public OrderRepositoryShould()
     {
-        
+        _mediator = Substitute.For<IMediator>();
     }
 
     /// <summary>
@@ -71,7 +74,7 @@ public class OrderRepositoryShould : IAsyncLifetime
 
         //Act
         var orderRepository = new OrderRepository(_context);
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
 
         await orderRepository.AddAsync(order);
         await unitOfWork.SaveChangesAsync();
@@ -95,7 +98,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         var orderRepository = new OrderRepository(_context);
         await orderRepository.AddAsync(order);
 
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
         await unitOfWork.SaveChangesAsync();
 
         //Act
@@ -121,7 +124,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         var orderRepository = new OrderRepository(_context);
         await orderRepository.AddAsync(order);
 
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
         await unitOfWork.SaveChangesAsync();
 
         //Assert
@@ -148,7 +151,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         await orderRepository.AddAsync(order1);
         await orderRepository.AddAsync(order2);
 
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
         await unitOfWork.SaveChangesAsync();
 
         //Act
@@ -170,7 +173,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         var firstOrder = Order.Create(firstOrderId, Location.MinCoordinates, Volume.Create(5));
         var secondOrder = Order.Create(secondOrderId, Location.MinCoordinates, Volume.Create(5));
         var orderRepository = new OrderRepository(_context);
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
 
         await orderRepository.AddAsync(firstOrder);
         await orderRepository.AddAsync(secondOrder);
@@ -204,7 +207,7 @@ public class OrderRepositoryShould : IAsyncLifetime
         await orderRepository.AddAsync(order1);
         await orderRepository.AddAsync(order2);
 
-        var unitOfWork = new UnitOfWork(_context);
+        var unitOfWork = new UnitOfWork(_context, _mediator);
         await unitOfWork.SaveChangesAsync();
 
         //Act

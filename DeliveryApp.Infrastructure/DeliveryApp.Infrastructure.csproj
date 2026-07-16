@@ -51,6 +51,8 @@
         <CompileOutputs>True</CompileOutputs>
         <OutputDir>obj\Debug\net9.0\</OutputDir>
       </Protobuf>
+      <None Remove="Adapters\Kafka\order_events.proto" />
+      <Protobuf Include="Adapters\Kafka\order_events.proto" />
     </ItemGroup>
 
 </Project>
